@@ -11,6 +11,11 @@ def convert(csv_file, json_file, model):
                     row['is_published'] = True
                 else:
                     row['is_published'] = False
+
+            if 'location_id' in row:
+                row['locations'] = [row['location_id']]
+                del row['location_id']
+
             result.append({
                 "model": model,
                 "fields": row,
@@ -23,5 +28,7 @@ def convert(csv_file, json_file, model):
 
 
 if __name__ == '__main__':
-    convert('ads.csv', 'ads.json', 'ads.ad')
-    convert('categories.csv', 'categories.json', 'ads.category')
+    convert('ad.csv', 'ad.json', 'ads.ad')
+    convert('category.csv', 'category.json', 'ads.category')
+    convert('location.csv', 'location.json', 'ads.location')
+    convert('user.csv', 'user.json', 'ads.user')
