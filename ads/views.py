@@ -295,13 +295,16 @@ class User_List_Update_View(UpdateView):
         data = json.loads(request.body)
 
         if 'first_name' in data:
-            self.object.name = data.get('first_name')
+            self.object.first_name = data.get('first_name')
 
         if 'username' in data:
-            self.object.name = data.get('username')
+            self.object.username = data.get('username')
 
         if 'last_name' in data:
-            self.object.name = data.get('last_name')
+            self.object.last_name = data.get('last_name')
+
+        if 'age' in data:
+            self.object.age = data.get('age')
 
         if 'locations' in data:
             self.object.locations.clear()
@@ -310,13 +313,13 @@ class User_List_Update_View(UpdateView):
                 self.object.locations.add(loc)
 
         return JsonResponse({
-            'id': self.objectself.object.pk,
+            'id': self.object.pk,
             "first_name": self.object.first_name,
             "last_name": self.object.last_name,
             "username": self.object.username,
             "role": self.object.role,
             "age": self.object.age,
-            "locations": [loc.name for loc in self.locations.all()]})
+            "locations": [loc.name for loc in self.object.locations.all()]})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
