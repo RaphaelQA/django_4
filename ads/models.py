@@ -49,12 +49,12 @@ class User(models.Model):
 class Ad(models.Model):
     name = models.CharField(max_length=200)
     price = models.PositiveIntegerField()
-    author_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField()
     address = models.CharField(max_length=200)
-    is_published = models.BooleanField()
+    is_published = models.BooleanField(default=True)
     image = models.ImageField(upload_to='ad_image/', null=True, blank=True)
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Объявление"

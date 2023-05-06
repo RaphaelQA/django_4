@@ -5,6 +5,7 @@ from ads.models import User, Location
 
 
 class UserListSerializer(serializers.ModelSerializer):
+    total_ads = serializers.IntegerField()
     locations = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -14,7 +15,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'username', 'role', 'age', 'locations']
+        fields = ['id', 'total_ads', 'first_name', 'last_name', 'username', 'role', 'age', 'locations']
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -44,7 +45,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def is_valid(self, raise_exception=False):
-        self.locations = self.initial_data.pop('locations')
+        self.locations = self.initial_data.pop('locations', [])
         return super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
@@ -80,10 +81,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def save(self):
         user = super().save()
-
-        for loc_name in self.locations:
-            loc, _ = Location.objects.get_or_create(name=loc_name)
-            user.locations.add(loc)
+        if self.locations:
+            user.locations.clear()
+            for loc_name in self.locations:
+                loc, _ = Location.objects.get_or_create(name=loc_name)
+                user.locations.add(loc)
 
         user.save()
         return user
