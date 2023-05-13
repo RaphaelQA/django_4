@@ -54,7 +54,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         for loc_name in self.locations:
             loc, _ = Location.objects.get_or_create(name=loc_name)
             user.locations.add(loc)
-        user.save()
 
         return user
 
@@ -87,7 +86,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                 loc, _ = Location.objects.get_or_create(name=loc_name)
                 user.locations.add(loc)
 
-        user.save()
+        # user.save()
         return user
 
 

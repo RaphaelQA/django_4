@@ -57,6 +57,7 @@ class AdUpdateSerializer(serializers.ModelSerializer):
 
 
 
+
 class AdDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad

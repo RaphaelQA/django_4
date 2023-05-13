@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from ads.ad_serializer import AdListSerializer, AdDetailSerializer, AdDestroySerializer, AdCreateSerializer, \
@@ -82,7 +83,7 @@ class AdPagination(PageNumberPagination):
 
 
 class AdListView(ListAPIView):
-    queryset = Ad.objects.all()
+    queryset = Ad.objects.all().order_by('id')
     serializer_class = AdListSerializer
     pagination_class = AdPagination
 
@@ -112,6 +113,7 @@ class AdListView(ListAPIView):
 class AdDetailView(RetrieveAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdDetailSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class AdListUpdateView(UpdateAPIView):

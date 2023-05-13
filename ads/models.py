@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -29,14 +30,14 @@ class UserRoles(models.TextChoices):
     MODERATOR = "moderator", "Модератор"
     ADMIN = "admin", "Админ"
 
-class User(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=25)
-    password = models.CharField(max_length=25)
+class User(AbstractUser):
     role = models.CharField(max_length=25, choices=UserRoles.choices, default=UserRoles.MEMBER)
     age = models.PositiveIntegerField()
     locations = models.ManyToManyField(Location)
+
+    def save(self, *args, **kwargs):
+        self.set_password(raw_password=self.password)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Пользователь"
